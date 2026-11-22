@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fisika Induktansi (Bab 32) - Pembelajaran Interaktif & Simulasi</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- KaTeX for Math Equations -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+            physics: {
+              inductor: '#06b6d4', // cyan
+              resistor: '#f59e0b', // amber
+              capacitor: '#10b981', // emerald
+              magnetic: '#8b5cf6', // purple
+              voltage: '#ec4899', // pink
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col selection:bg-cyan-500 selection:text-slate-950">
+
+  <!-- TOP NAVBAR -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-slate-950/80 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 via-blue-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+          <i data-lucide="zap" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <span class="text-xs font-mono font-semibold tracking-wider text-cyan-400 uppercase">Fisika Dasar II • Bab 32</span>
+          <h1 class="text-lg font-bold text-white leading-tight">Inductance & Rangkaian RLC</h1>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2">
+        <a href="#quick-quiz" onclick="switchTab('tab-quiz'); return false;" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-300 border border-slate-700 transition cursor-pointer">
+          <i data-lucide="help-circle" class="w-4 h-4 text-cyan-400"></i>
+          <span>Kuis Cepat</span>
+        </a>
+        <a href="#kalkulator" onclick="switchTab('tab-calc'); return false;" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-300 border border-slate-700 transition cursor-pointer">
+          <i data-lucide="calculator" class="w-4 h-4 text-emerald-400"></i>
+          <span>Kalkulator Fisika</span>
+        </a>
+        <button id="mobileMenuBtn" class="p-2 rounded-lg bg-slate-900 border border-slate-800 lg:hidden text-slate-400 hover:text-white">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER WITH SIDEBAR & CONTENT -->
+  <div class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 flex gap-8">
+    
+    <!-- DESKTOP NAVIGATION SIDEBAR -->
+    <aside id="sidebar" class="hidden lg:block w-72 flex-shrink-0 sticky top-24 self-start max-h-[calc(100vh-8rem)] overflow-y-auto pr-2 custom-scrollbar">
+      <div class="bg-slate-900/60 backdrop-blur border border-slate-800/80 rounded-2xl p-4 space-y-2">
+        <div class="text-[11px] font-mono font-bold uppercase text-slate-400 tracking-wider px-3 py-1">Daftar Materi</div>
+        
+        <nav class="space-y-1 text-sm font-medium">
+          <button data-tab="tab-intro" class="tab-btn active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-left group">
+            <i data-lucide="compass" class="w-4 h-4 text-cyan-400"></i>
+            <span class="flex-1">Pengantar Bab</span>
+          </button>
+          
+          <button data-tab="tab-32-1" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-left group">
+            <span class="w-5 h-5 rounded-md bg-cyan-950 text-cyan-400 border border-cyan-800/50 flex items-center justify-center text-xs font-mono font-bold">1</span>
+            <div class="flex-1">
+              <div>32.1 Induktansi Diri</div>
+              <div class="text-[11px] text-slate-400 font-normal">Back EMF & Solenoida</div>
+            </div>
+          </button>
+          
+          <button data-tab="tab-32-2" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-left group">
+            <span class="w-5 h-5 rounded-md bg-amber-950 text-amber-400 border border-amber-800/50 flex items-center justify-center text-xs font-mono font-bold">2</span>
+            <div class="flex-1">
+              <div>32.2 Rangkaian RL</div>
+              <div class="text-[11px] text-slate-400 font-normal">Pengisian & Peluruhan Arus</div>
+            </div>
+          </button>
+
+          <button data-tab="tab-32-3" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-left group">
+            <span class="w-5 h-5 rounded-md bg-purple-950 text-purple-400 border border-purple-800/50 flex items-center justify-center text-xs font-mono font-bold">3</span>
+            <div class="flex-1">
+              <div>32.3 Energi Medan Magnet</div>
+              <div class="text-[11px] text-slate-400 font-normal">Rapat Energi & Kabel Koaksial</div>
+            </div>
+          </button>
+
+          <button data-tab="tab-32-4" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-left group">
+            <span class="w-5 h-5 rounded-md bg-blue-950 text-blue-400 border border-blue-800/50 flex items-center justify-center text-xs font-mono font-bold">4</span>
+            <div class="flex-1">
+              <div>32.4 Induktansi Silang</div>
+              <div class="text-[11px] text-slate-400 font-normal">Mutual & Wireless Charger</div>
+            </div>
+          </button>
+
+          <button data-tab="tab-32-5" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-left group">
+            <span class="w-5 h-5 rounded-md bg-emerald-950 text-emerald-400 border border-emerald-800/50 flex items-center justify-center text-xs font-mono font-bold">5</span>
+            <div class="flex-1">
+              <div>32.5 Osilasi LC</div>
+              <div class="text-[11px] text-slate-400 font-normal">Analogi Rangkaian vs Pegas</div>
+            </div>
+          </button>
+
+          <button data-tab="tab-32-6" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-left group">
+            <span class="w-5 h-5 rounded-md bg-rose-950 text-rose-400 border border-rose-800/50 flex items-center justify-center text-xs font-mono font-bold">6</span>
+            <div class="flex-1">
+              <div>32.6 Rangkaian RLC</div>
+              <div class="text-[11px] text-slate-400 font-normal">Redaman & Osiloskop</div>
+            </div>
+          </button>
+
+          <div class="pt-3 border-t border-slate-800">
+            <button data-tab="tab-quiz" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-left group text-cyan-300 hover:text-white">
+              <i data-lucide="check-circle-2" class="w-4 h-4 text-cyan-400"></i>
+              <span>Kuis Cepat (32.1 - 32.8)</span>
+            </button>
+            <button data-tab="tab-calc" class="tab-btn w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition text-left group text-emerald-300 hover:text-white">
+              <i data-lucide="sliders" class="w-4 h-4 text-emerald-400"></i>
+              <span>Kalkulator Rumus Fisika</span>
+            </button>
+          </div>
+        </nav>
+      </div>
+
+      <!-- Quick Info Card -->
+      <div class="mt-4 p-4 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800/80 text-xs text-slate-400">
+        <div class="flex items-center gap-2 text-cyan-400 font-semibold mb-1">
+          <i data-lucide="info" class="w-4 h-4"></i>
+          <span>Tokoh Penting</span>
+        </div>
+        <p class="leading-relaxed">
+          <strong class="text-slate-200">Joseph Henry</strong> (1797–1878) menemukan induktansi diri secara independen sekitar 1830. Satuan induktansi SI, <em class="text-cyan-300">Henry (H)</em>, diabadikan untuk menghormatinya.
+        </p>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 min-w-0">
+      
+      <!-- ============================================== -->
+      <!-- SECTION: PENGANTAR (INTRO) -->
+      <!-- ============================================== -->
+      <div id="tab-intro" class="tab-content space-y-6">
+        <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-slate-900 to-cyan-950/40 border border-slate-800 p-8">
+          <div class="absolute -right-12 -top-12 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+          
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-950/80 border border-cyan-800/60 text-cyan-400 text-xs font-mono font-medium mb-4">
+            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+            Serway & Jewett • Physics for Scientists and Engineers 6th Ed
+          </div>
+          
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+            Induktansi: Sifat Kelembaman Elektromagnetik
+          </h2>
+          <p class="text-slate-300 text-base sm:text-lg leading-relaxed max-w-3xl">
+            Di bab sebelumnya, kita mempelajari bahwa perubahan fluks magnetik menghasilkan Gaya Gerak Listrik (GGL) dan arus induksi. Di Bab 32 ini, kita melihat konsekuensi fundamental: <strong class="text-cyan-300">arus yang berubah pada suatu rangkaian akan menginduksi GGL yang menentang perubahan arus itu sendiri</strong>. Fenomena ini disebut <em class="text-white">induktansi diri</em>, dan menjadi dasar komponen elektronika bernama <span class="text-cyan-400 font-semibold">Induktor</span>.
+          </p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+            <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80">
+              <div class="flex items-center gap-2 text-cyan-400 font-semibold mb-1">
+                <i data-lucide="shield" class="w-4 h-4"></i>
+                Detektor Logam Bandara
+              </div>
+              <p class="text-xs text-slate-400">
+                Koil kawat besar pada gerbang detektor memiliki nilai induktansi. Saat logam melintas, induktansi berubah drastis dan membunyikan alarm.
+              </p>
+            </div>
+            
+            <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80">
+              <div class="flex items-center gap-2 text-purple-400 font-semibold mb-1">
+                <i data-lucide="wifi" class="w-4 h-4"></i>
+                Wireless Charging
+              </div>
+              <p class="text-xs text-slate-400">
+                Sikat gigi elektrik & mobil listrik memanfaatkan induktansi silang untuk mentransfer energi tanpa kontak fisik logam.
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-950/60 border border-slate-800/80">
+              <div class="flex items-center gap-2 text-emerald-400 font-semibold mb-1">
+                <i data-lucide="radio" class="w-4 h-4"></i>
+                Tuner Radio (Osilasi LC)
+              </div>
+              <p class="text-xs text-slate-400">
+                Memutar kenop radio mengubah kapasitansi frekuensi resonansi alami rangkaian LC agar cocok dengan frekuensi stasiun pemancar.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ringkasan Pokok Bahasan -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-cyan-500/50 transition">
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-cyan-900/60 text-cyan-300 flex items-center justify-center text-xs font-mono">1</span>
+              32.1 Induktansi Diri & Solenoida
+            </h3>
+            <p class="text-sm text-slate-400 mb-3">
+              Koil menentang perubahan arus dengan menghasilkan GGL lawan (<em class="text-slate-200">back EMF</em>). Induktansi sebuah solenoida ideal berbanding lurus dengan kuadrat jumlah lilitan: \(L = \frac{\mu_0 N^2 A}{\ell}\).
+            </p>
+            <button onclick="switchTab('tab-32-1')" class="text-xs font-semibold text-cyan-400 hover:text-cyan-300 flex items-center gap-1">
+              Buka Materi & Simulasi Solenoida <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-amber-500/50 transition">
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-amber-900/60 text-amber-300 flex items-center justify-center text-xs font-mono">2</span>
+              32.2 Rangkaian RL Dinamis
+            </h3>
+            <p class="text-sm text-slate-400 mb-3">
+              Induktor membuat respons rangkaian menjadi lambat (<em class="text-slate-200">sluggish</em>). Arus bertumbuh dan meluruh secara eksponensial dengan konstanta waktu \(\tau = L/R\).
+            </p>
+            <button onclick="switchTab('tab-32-2')" class="text-xs font-semibold text-amber-400 hover:text-amber-300 flex items-center gap-1">
+              Buka Materi & Simulasi Sakelar RL <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-purple-500/50 transition">
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-purple-900/60 text-purple-300 flex items-center justify-center text-xs font-mono">3</span>
+              32.3 Energi Magnetik & 32.4 Induktansi Silang
+            </h3>
+            <p class="text-sm text-slate-400 mb-3">
+              Energi medan magnetik \(U = \frac{1}{2}LI^2\), rapat energi \(u_B = \frac{B^2}{2\mu_0}\), dan prinsip kopling silang \(M\) pada teknologi wireless charging.
+            </p>
+            <div class="flex items-center gap-3">
+              <button onclick="switchTab('tab-32-3')" class="text-xs font-semibold text-purple-400 hover:text-purple-300 flex items-center gap-1">
+                Energi Medan <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+              <span class="text-slate-600">•</span>
+              <button onclick="switchTab('tab-32-4')" class="text-xs font-semibold text-blue-400 hover:text-blue-300 flex items-center gap-1">
+                Induktansi Silang <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="p-6 rounded-2xl bg-slate-900/50 border border-slate-800 hover:border-emerald-500/50 transition">
+            <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+              <span class="w-6 h-6 rounded-lg bg-emerald-900/60 text-emerald-300 flex items-center justify-center text-xs font-mono">4</span>
+              32.5 Rangkaian LC & 32.6 RLC Teredam
+            </h3>
+            <p class="text-sm text-slate-400 mb-3">
+              Osilasi harmonik elektromagnetik tanpa redaman (analogi pegas-massa) dan osilasi teredam RLC dengan simulator osiloskop.
+            </p>
+            <div class="flex items-center gap-3">
+              <button onclick="switchTab('tab-32-5')" class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1">
+                Osilasi LC <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+              <span class="text-slate-600">•</span>
+              <button onclick="switchTab('tab-32-6')" class="text-xs font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1">
+                Rangkaian RLC <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION: 32.1 SELF-INDUCTANCE -->
+      <!-- ============================================== -->
+      <div id="tab-32-1" class="tab-content hidden space-y-6">
+        <!-- Header -->
+        <div class="border-b border-slate-800 pb-4">
+          <div class="text-xs font-mono text-cyan-400 font-semibold uppercase tracking-wider mb-1">Subbab 32.1</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Induktansi Diri (Self-Inductance) & GGL Lawan</h2>
+        </div>
+
+        <!-- Teori & Rumus -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div class="space-y-4 text-slate-300 text-sm leading-relaxed">
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+              <h4 class="font-bold text-white flex items-center gap-2">
+                <i data-lucide="help-circle" class="w-4 h-4 text-cyan-400"></i>
+                Apa yang Terjadi Saat Sakelar Dinyalakan?
+              </h4>
+              <p>
+                Ketika sakelar ditutup pada rangkaian yang memiliki koil, arus <strong>tidak langsung melonjak</strong> dari nol ke nilai maksimum \(\varepsilon/R\). Mengapa?
+              </p>
+              <ul class="list-disc list-inside space-y-1 text-slate-300 text-xs">
+                <li>Arus yang mulai mengalir menciptakan medan magnet dan fluks magnetik \(\Phi_B\) di sekitar kawat loop.</li>
+                <li>Sesuai <strong>Hukum Faraday</strong>, perubahan fluks magnetik terhadap waktu menginduksi Gaya Gerak Listrik (GGL) pada loop itu sendiri.</li>
+                <li>Berdasarkan <strong>Hukum Lenz</strong>, arah GGL induksi ini <em>selalu melawan</em> arah perubahan arus sumber (itulah mengapa disebut <strong>Back EMF</strong> atau GGL Lawan).</li>
+              </ul>
+            </div>
+
+            <!-- Rumus Induktansi Diri -->
+            <div class="p-4 rounded-xl bg-cyan-950/30 border border-cyan-800/40">
+              <div class="text-xs font-mono text-cyan-300 font-bold mb-1">PERSAMAAN GGL INDUKSI DIRI:</div>
+              <div class="text-center py-2 text-lg text-white font-serif bg-slate-950/60 rounded-lg border border-cyan-900/40 my-2">
+                $$\varepsilon_L = -L \frac{dI}{dt}$$
+              </div>
+              <p class="text-xs text-slate-400 mt-2">
+                Tanda negatif menyatakan Hukum Lenz (arah GGL melawan perubahan arus). Konstanta kesebandingan <strong class="text-cyan-300">\(L\)</strong> disebut <strong>induktansi</strong> dari koil.
+              </p>
+            </div>
+
+            <!-- Rumus Solenoida -->
+            <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800">
+              <div class="text-xs font-mono text-slate-400 font-bold mb-1">INDUKTANSI SOLENOIDA IDEAL:</div>
+              <div class="text-center py-2 text-base text-white font-serif bg-slate-950/60 rounded-lg border border-slate-800 my-2">
+                $$L = \frac{N \Phi_B}{I} = \frac{\mu_0 N^2 A}{\ell} = \mu_0 n^2 A \ell = \mu_0 n^2 V$$
+              </div>
+              <div class="grid grid-cols-2 gap-2 text-xs text-slate-400 mt-2">
+                <div>\(N\): Total lilitan</div>
+                <div>\(\ell\): Panjang solenoida (\(\text{m}\))</div>
+                <div>\(A\): Luas penampang (\(\text{m}^2\))</div>
+                <div>\(n = N/\ell\): Kerapatan lilitan</div>
+              </div>
+              <div class="mt-2 text-xs text-amber-300/90 bg-amber-950/30 p-2 rounded border border-amber-900/40">
+                <strong>Catatan Efek Bahan:</strong> Jika di dalam rongga solenoida dimasukkan batang feromagnetik dengan permeabilitas \(\mu = \kappa_m \mu_0\) (misalnya besi lunak \(\kappa_m \approx 500\)), nilai induktansi akan <strong>meningkat 500 kali lipat</strong>!
+              </div>
+            </div>
+          </div>
+
+          <!-- SIMULASI INTERAKTIF SOLENOIDA -->
+          <div class="flex flex-col rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-xl">
+            <div class="p-4 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i data-lucide="activity" class="w-4 h-4 text-cyan-400"></i>
+                <span class="font-bold text-sm text-white">Simulasi Interaktif: Koil Solenoida & Inti Besi</span>
+              </div>
+              <span class="text-[11px] font-mono bg-cyan-950 text-cyan-400 px-2 py-0.5 rounded border border-cyan-800/60">Live Canvas</span>
+            </div>
+
+            <!-- Canvas Solenoid -->
+            <div class="relative bg-slate-950 flex items-center justify-center p-2" style="height: 250px;">
+              <canvas id="solenoidCanvas" width="480" height="240" class="w-full h-full block"></canvas>
+              
+              <!-- Floating HUD -->
+              <div class="absolute top-3 left-3 bg-slate-900/90 backdrop-blur px-3 py-1.5 rounded-lg border border-slate-800 text-[11px] font-mono text-slate-300 space-y-0.5">
+                <div>Induktansi \(L\): <span id="hudL" class="text-cyan-400 font-bold">0.18 mH</span></div>
+                <div>GGL Lawan \(\varepsilon_L\): <span id="hudEmf" class="text-rose-400 font-bold">0.00 V</span></div>
+              </div>
+            </div>
+
+            <!-- Simulation Controls -->
+            <div class="p-4 bg-slate-900/90 space-y-3 border-t border-slate-800 text-xs">
+              <div>
+                <div class="flex justify-between text-slate-300 mb-1">
+                  <span>Jumlah Lilitan (\(N\)): <strong id="lblN" class="text-cyan-400">300</strong> lilitan</span>
+                </div>
+                <input id="sliderN" type="range" min="50" max="800" step="10" value="300" class="w-full accent-cyan-500">
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <div class="flex justify-between text-slate-300 mb-1">
+                    <span>Panjang (\(\ell\)): <span id="lblLen" class="text-cyan-400">25 cm</span></span>
+                  </div>
+                  <input id="sliderLen" type="range" min="10" max="60" step="1" value="25" class="w-full accent-cyan-500">
+                </div>
+                <div>
+                  <div class="flex justify-between text-slate-300 mb-1">
+                    <span>Radius (\(r\)): <span id="lblRadius" class="text-cyan-400">1.13 cm</span></span>
+                  </div>
+                  <input id="sliderRadius" type="range" min="0.5" max="3.0" step="0.1" value="1.13" class="w-full accent-cyan-500">
+                </div>
+              </div>
+
+              <!-- Laju Perubahan Arus dI/dt -->
+              <div>
+                <div class="flex justify-between text-slate-300 mb-1">
+                  <span>Laju Perubahan Arus (\(dI/dt\)): <strong id="lblDidt" class="text-amber-400">+50.0 A/s</strong></span>
+                </div>
+                <input id="sliderDidt" type="range" min="-100" max="100" step="5" value="50" class="w-full accent-amber-500">
+              </div>
+
+              <!-- Toggle Inti Feromagnetik -->
+              <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input id="toggleIronCore" type="checkbox" class="w-4 h-4 rounded text-cyan-600 bg-slate-950 border-slate-700 focus:ring-cyan-500">
+                  <span class="text-slate-300 font-medium">Sisipkan Inti Besi Lunak (\(\kappa_m = 500\))</span>
+                </label>
+                <button id="btnPulseCurrent" class="px-3 py-1 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-medium shadow transition">
+                  Pulsa Arus
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION: 32.2 RL CIRCUITS -->
+      <!-- ============================================== -->
+      <div id="tab-32-2" class="tab-content hidden space-y-6">
+        <!-- Header -->
+        <div class="border-b border-slate-800 pb-4">
+          <div class="text-xs font-mono text-amber-400 font-semibold uppercase tracking-wider mb-1">Subbab 32.2</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Rangkaian RL (Resistor-Induktor)</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Teori Rangkaian RL (5 cols) -->
+          <div class="lg:col-span-5 space-y-4 text-xs leading-relaxed text-slate-300">
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm">Hukum Loop Kirchhoff</h4>
+              <p>
+                Ketika sakelar ditutup ke posisi <strong class="text-cyan-400">a</strong> (menghubungkan baterai \(\varepsilon\)), persamaan loop searah jarum jam:
+              </p>
+              <div class="text-center py-2 text-sm text-white font-mono bg-slate-950 rounded border border-slate-800">
+                $$\varepsilon - IR - L \frac{dI}{dt} = 0$$
+              </div>
+              <p>
+                Arus bertambah secara perlahan mengikuti fungsi eksponensial:
+              </p>
+              <div class="text-center py-2 text-sm text-cyan-300 font-mono bg-cyan-950/40 rounded border border-cyan-900/50">
+                $$I(t) = \frac{\varepsilon}{R} \left(1 - e^{-t/\tau}\right)$$
+              </div>
+              <p>
+                Dengan konstanta waktu rangkaian induktif:
+              </p>
+              <div class="text-center py-1 text-sm text-amber-400 font-mono bg-amber-950/30 rounded border border-amber-900/40">
+                $$\tau = \frac{L}{R}$$
+              </div>
+              <p class="text-[11px] text-slate-400">
+                Pada \(t = \tau\), arus mencapai \((1 - e^{-1}) \approx 63.2\%\) dari nilai saturasi akhir \(\varepsilon/R\).
+              </p>
+            </div>
+
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm">Peluruhan Arus (Posisi Sakelar b)</h4>
+              <p>
+                Baterai dilepas dan rangkaian ditutup ke posisi <strong class="text-rose-400">b</strong>. Induktor mempertahankan aliran arus dengan meluruhkan energi medan magnetnya:
+              </p>
+              <div class="text-center py-2 text-sm text-rose-300 font-mono bg-rose-950/30 rounded border border-rose-900/40">
+                $$I(t) = I_0 e^{-t/\tau} = \frac{\varepsilon}{R} e^{-t/\tau}$$
+              </div>
+              <p class="text-[11px] text-slate-400">
+                Laju penurunan arus \(dI/dt\) bernilai negatif, menyebabkan tegangan induktor \(\Delta V_L = -L(dI/dt)\) menjadi positif dan bertindak sebagai sumber energi sementara.
+              </p>
+            </div>
+          </div>
+
+          <!-- SIMULASI RANGKAIAN RL LIVE INTERAKTIF (7 cols) -->
+          <div class="lg:col-span-7 flex flex-col rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-xl">
+            <div class="p-3 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i data-lucide="play-circle" class="w-4 h-4 text-amber-400"></i>
+                <span class="font-bold text-sm text-white">Laboratorium Virtual Rangkaian RL</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="btnSwitchA" class="px-2.5 py-1 text-xs rounded font-semibold bg-cyan-600 hover:bg-cyan-500 text-white transition">
+                  Posisi a (Charge)
+                </button>
+                <button id="btnSwitchB" class="px-2.5 py-1 text-xs rounded font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition">
+                  Posisi b (Decay)
+                </button>
+                <button id="btnResetRL" class="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300" title="Reset">
+                  <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Canvas Rangkaian & Lampu -->
+            <div class="relative bg-slate-950 p-2" style="height: 220px;">
+              <canvas id="rlCircuitCanvas" width="540" height="220" class="w-full h-full block"></canvas>
+            </div>
+
+            <!-- Canvas Grafik Real-time -->
+            <div class="border-t border-slate-800 bg-slate-950/70 p-2 relative" style="height: 180px;">
+              <canvas id="rlGraphCanvas" width="540" height="180" class="w-full h-full block"></canvas>
+              <div class="absolute top-2 right-4 flex items-center gap-3 text-[11px] font-mono bg-slate-900/90 px-2.5 py-1 rounded border border-slate-800">
+                <span class="flex items-center gap-1 text-cyan-400"><span class="w-2 h-2 rounded-full bg-cyan-400 inline-block"></span> Arus \(I(t)\)</span>
+                <span class="flex items-center gap-1 text-amber-400"><span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span> \(V_R(t)\)</span>
+                <span class="flex items-center gap-1 text-rose-400"><span class="w-2 h-2 rounded-full bg-rose-400 inline-block"></span> \(V_L(t)\)</span>
+              </div>
+            </div>
+
+            <!-- Controls Slider RL -->
+            <div class="p-3 bg-slate-900/90 border-t border-slate-800 grid grid-cols-3 gap-3 text-xs">
+              <div>
+                <div class="flex justify-between text-slate-300 mb-0.5">
+                  <span>GGL (\(\varepsilon\)): <strong id="lblEmfRL" class="text-white">12.0 V</strong></span>
+                </div>
+                <input id="sliderEmfRL" type="range" min="2" max="24" step="1" value="12" class="w-full accent-cyan-500">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-300 mb-0.5">
+                  <span>Resistor (\(R\)): <strong id="lblRRL" class="text-amber-400">6.0 \(\Omega\)</strong></span>
+                </div>
+                <input id="sliderRRL" type="range" min="1" max="20" step="0.5" value="6" class="w-full accent-amber-500">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-300 mb-0.5">
+                  <span>Induktor (\(L\)): <strong id="lblLRL" class="text-cyan-400">30 mH</strong></span>
+                </div>
+                <input id="sliderLRL" type="range" min="5" max="100" step="5" value="30" class="w-full accent-cyan-500">
+              </div>
+            </div>
+            
+            <div class="px-4 py-2 bg-slate-950 text-[11px] text-slate-400 flex justify-between border-t border-slate-900">
+              <div>Konstanta Waktu (\(\tau = L/R\)): <strong id="valTau" class="text-cyan-300 font-mono">5.00 ms</strong></div>
+              <div>Arus Maksimum (\(I_{\max} = \varepsilon/R\)): <strong id="valImax" class="text-amber-300 font-mono">2.00 A</strong></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION: 32.3 ENERGY IN MAGNETIC FIELD -->
+      <!-- ============================================== -->
+      <div id="tab-32-3" class="tab-content hidden space-y-6">
+        <div class="border-b border-slate-800 pb-4">
+          <div class="text-xs font-mono text-purple-400 font-semibold uppercase tracking-wider mb-1">Subbab 32.3</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Energi yang Tersimpan dalam Medan Magnetik</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <!-- Kolom Kiri: Penurunan Rumus Energi & Rapat Energi -->
+          <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+            <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+              <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4 text-purple-400"></i>
+                Dari Mana Datangnya Energi Induktor?
+              </h3>
+              <p>
+                Karena GGL induksi diri menentang kenaikan arus, baterai harus melakukan usaha ekstra untuk mengalirkan muatan. Jika persamaan tegangan loop dikalikan dengan arus \(I\):
+              </p>
+              <div class="text-center py-2 text-xs text-white font-mono bg-slate-950 rounded border border-slate-800">
+                $$I\varepsilon = I^2 R + LI \frac{dI}{dt}$$
+              </div>
+              <ul class="list-disc list-inside space-y-1 text-slate-400 text-[11px]">
+                <li>\(I\varepsilon\) adalah laju daya total yang dipasok baterai.</li>
+                <li>\(I^2 R\) adalah laju energi yang hilang menjadi kalor pada resistor.</li>
+                <li>\(LI(dI/dt)\) adalah laju penyimpanan energi ke dalam medan magnetik induktor: \(\frac{dU}{dt} = LI \frac{dI}{dt}\).</li>
+              </ul>
+              
+              <div class="pt-2">
+                <div class="text-xs font-bold text-purple-300 mb-1">ENERGI TOTAL DALAM INDUKTOR:</div>
+                <div class="text-center py-2 text-base text-purple-200 font-serif bg-purple-950/40 rounded-xl border border-purple-800/40">
+                  $$U = \int_0^I L I' dI' = \frac{1}{2} L I^2$$
+                </div>
+              </div>
+            </div>
+
+            <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                <i data-lucide="shield-alert" class="w-4 h-4 text-amber-400"></i>
+                Perbandingan: Kapasitor vs Resistor vs Induktor (Pitfall 32.1)
+              </h4>
+              <p class="text-[11px] text-slate-400">
+                Buku Serway mengingatkan mekanisme penyimpanan energi yang berbeda secara fundamental:
+              </p>
+              <div class="grid grid-cols-3 gap-2 text-center text-[10px] font-mono mt-2">
+                <div class="p-2 rounded bg-slate-950 border border-emerald-900/40 text-emerald-300">
+                  <strong>Kapasitor</strong><br>
+                  Menyimpan muatan statis pada pelat:<br>
+                  \(U = \frac{1}{2}C(\Delta V)^2\)
+                </div>
+                <div class="p-2 rounded bg-slate-950 border border-cyan-900/40 text-cyan-300">
+                  <strong>Induktor</strong><br>
+                  Menyimpan arus dinamik dalam medan magnet:<br>
+                  \(U = \frac{1}{2}LI^2\)
+                </div>
+                <div class="p-2 rounded bg-slate-950 border border-amber-900/40 text-amber-300">
+                  <strong>Resistor</strong><br>
+                  Tidak menyimpan energi, melainkan mendisipasi kalor:<br>
+                  \(P = I^2 R\)
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kolom Kanan: Rapat Energi & Studi Kasus Kabel Koaksial -->
+          <div class="space-y-4 text-xs text-slate-300 leading-relaxed">
+            <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+              <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                <i data-lucide="box" class="w-4 h-4 text-cyan-400"></i>
+                Rapat Energi Magnetik (\(u_B\))
+              </h3>
+              <p>
+                Rapat energi menyatakan banyaknya energi magnetik yang tersimpan per satuan volume rongga:
+              </p>
+              <div class="text-center py-2.5 text-base text-cyan-300 font-serif bg-slate-950 rounded-xl border border-cyan-900/40">
+                $$u_B = \frac{U}{\text{Volume}} = \frac{B^2}{2\mu_0}$$
+              </div>
+              <p class="text-[11px] text-slate-400">
+                Persamaan ini setara persis dengan rapat energi medan listrik \(u_E = \frac{1}{2}\varepsilon_0 E^2\). Keduanya membuktikan bahwa <em>medan fisik itu sendiri mengandung energi nyata</em>.
+              </p>
+            </div>
+
+            <!-- Kabel Koaksial (Contoh 32.5) -->
+            <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                <i data-lucide="layers" class="w-4 h-4 text-indigo-400"></i>
+                Contoh 32.5: Induktansi Kabel Koaksial
+              </h4>
+              <p class="text-[11px] text-slate-400">
+                Kabel koaksial terdiri dari kawat inti berjari-jari \(a\) dan selubung luar berjari-jari \(b\). Medan magnet di celah dihitung dengan Hukum Ampere: \(B = \frac{\mu_0 I}{2\pi r}\).
+              </p>
+              <div class="text-center py-2 text-xs text-slate-200 font-mono bg-slate-950 rounded border border-slate-800">
+                $$\Phi_B = \int_a^b B (\ell\, dr) = \frac{\mu_0 I \ell}{2\pi} \int_a^b \frac{dr}{r} = \frac{\mu_0 I \ell}{2\pi} \ln\left(\frac{b}{a}\right)$$
+              </div>
+              <p class="text-[11px] text-slate-400">
+                Sehingga induktansi kabel sepanjang \(\ell\) adalah:
+              </p>
+              <div class="text-center py-1.5 text-xs text-cyan-300 font-mono bg-cyan-950/30 rounded border border-cyan-900/40">
+                $$L = \frac{\Phi_B}{I} = \frac{\mu_0 \ell}{2\pi} \ln\left(\frac{b}{a}\right)$$
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION: 32.4 MUTUAL INDUCTANCE -->
+      <!-- ============================================== -->
+      <div id="tab-32-4" class="tab-content hidden space-y-6">
+        <div class="border-b border-slate-800 pb-4">
+          <div class="text-xs font-mono text-blue-400 font-semibold uppercase tracking-wider mb-1">Subbab 32.4</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Induktansi Silang (Mutual Inductance) & Aplikasi</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Teori Induktansi Silang (5 cols) -->
+          <div class="lg:col-span-5 space-y-4 text-xs leading-relaxed text-slate-300">
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                <i data-lucide="radio-tower" class="w-4 h-4 text-blue-400"></i>
+                Kopling Antar Dua Rangkaian Berdekatan
+              </h4>
+              <p>
+                Ketika dua koil didekatkan, arus yang berubah pada Koil 1 menghasilkan fluks magnetik \(\Phi_{12}\) yang menembus Koil 2. Induktansi silang didefinisikan sebagai:
+              </p>
+              <div class="text-center py-2 text-xs text-blue-300 font-mono bg-slate-950 rounded border border-slate-800">
+                $$M_{12} = \frac{N_2 \Phi_{12}}{I_1}$$
+              </div>
+              <p>
+                Berdasarkan prinsip timbal balik, terbukti bahwa:
+              </p>
+              <div class="text-center py-1.5 text-xs text-white font-mono bg-blue-950/30 rounded border border-blue-900/40">
+                $$M_{12} = M_{21} = M$$
+              </div>
+              <p>
+                GGL induksi yang muncul pada masing-masing koil adalah:
+              </p>
+              <div class="text-center py-2 text-xs text-amber-300 font-mono bg-slate-950 rounded border border-slate-800">
+                $$\varepsilon_2 = -M \frac{dI_1}{dt} \quad \text{dan} \quad \varepsilon_1 = -M \frac{dI_2}{dt}$$
+              </div>
+            </div>
+
+            <!-- Aplikasi Nyata: Wireless Charger (Contoh 32.6) -->
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                <i data-lucide="smartphone-charging" class="w-4 h-4 text-emerald-400"></i>
+                Contoh 32.6: Sikat Gigi Elektrik & Mobil Listrik
+              </h4>
+              <p class="text-[11px] text-slate-400">
+                Gagang sikat gigi tidak memiliki kontak logam terbuka untuk mencegah korsleting akibat air. Sebagai gantinya, koil pada dudukan mengalirkan arus AC frekuensi tinggi yang menginduksi arus pada koil di dalam gagang melalui <strong>induktansi silang</strong> untuk mengisi daya baterai.
+              </p>
+            </div>
+          </div>
+
+          <!-- SIMULASI INTERAKTIF WIRELESS CHARGER (7 cols) -->
+          <div class="lg:col-span-7 flex flex-col rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-xl">
+            <div class="p-3 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between">
+              <span class="font-bold text-xs text-white flex items-center gap-1.5">
+                <i data-lucide="wifi" class="w-4 h-4 text-emerald-400"></i>
+                Laboratorium Virtual: Kopling Dua Koil Induktansi Silang
+              </span>
+              <span id="txtCouplingStatus" class="text-[11px] font-mono text-emerald-400">Kopling Kuat</span>
+            </div>
+
+            <!-- Canvas Mutual -->
+            <div class="bg-slate-950 p-2" style="height: 200px;">
+              <canvas id="mutualCanvas" width="520" height="200" class="w-full h-full block"></canvas>
+            </div>
+
+            <!-- Controls -->
+            <div class="p-4 bg-slate-900/90 border-t border-slate-800 space-y-3 text-xs">
+              <div>
+                <div class="flex justify-between text-slate-300 mb-1">
+                  <span>Jarak Pemisah Antar Koil (\(d\)): <strong id="lblDist" class="text-cyan-400">1.5 cm</strong></span>
+                </div>
+                <input id="sliderDist" type="range" min="0.5" max="8.0" step="0.1" value="1.5" class="w-full accent-cyan-500">
+              </div>
+
+              <div class="grid grid-cols-2 gap-3 pt-1">
+                <div>
+                  <span class="text-slate-400 block mb-1">Frekuensi Arus AC:</span>
+                  <select id="selFreqAC" class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded p-1.5 text-xs">
+                    <option value="50">50 Hz (Standar PLN)</option>
+                    <option value="150" selected>150 kHz (Standar Qi Wireless)</option>
+                    <option value="300">300 kHz (Ultra Fast Inductive)</option>
+                  </select>
+                </div>
+                <div class="p-2.5 rounded bg-slate-950 border border-slate-800 flex flex-col justify-center text-center">
+                  <span class="text-slate-400 text-[10px]">Tegangan Induksi Koil Beban:</span>
+                  <span id="valEmfSec" class="font-mono text-emerald-400 font-bold text-xs">8.45 V (Lampu Terang)</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION: 32.5 LC OSCILLATIONS -->
+      <!-- ============================================== -->
+      <div id="tab-32-5" class="tab-content hidden space-y-6">
+        <div class="border-b border-slate-800 pb-4">
+          <div class="text-xs font-mono text-emerald-400 font-semibold uppercase tracking-wider mb-1">Subbab 32.5</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Osilasi Rangkaian LC & Analogi Mekanik Pegas</h2>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Penjelasan Konsep & Analogi -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs leading-relaxed">
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                <i data-lucide="repeat" class="w-4 h-4 text-emerald-400"></i>
+                Pertukaran Energi Listrik & Magnetik
+              </h4>
+              <p class="text-slate-300">
+                Ketika kapasitor bermuatan penuh (\(Q_{\max}\)) dihubungkan ke induktor tanpa hambatan (\(R=0\)), muatan dan arus akan berosilasi tanpa henti. Energi bolak-balik antara:
+              </p>
+              <div class="grid grid-cols-2 gap-2 text-center my-2 font-mono text-xs">
+                <div class="p-2 rounded bg-emerald-950/40 border border-emerald-900/60 text-emerald-300">
+                  Medan Listrik Kapasitor<br>
+                  <strong>\(U_C = \frac{Q^2}{2C}\)</strong>
+                </div>
+                <div class="p-2 rounded bg-cyan-950/40 border border-cyan-900/60 text-cyan-300">
+                  Medan Magnetik Induktor<br>
+                  <strong>\(U_L = \frac{1}{2}LI^2\)</strong>
+                </div>
+              </div>
+              <p class="text-slate-400 text-[11px]">
+                Energi Total Kekal: \(U_{\text{tot}} = U_C + U_L = \frac{Q_{\max}^2}{2C} = \frac{1}{2}LI_{\max}^2\).
+              </p>
+            </div>
+
+            <!-- Tabel Analogi Tabel 32.1 Serway -->
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                <i data-lucide="git-compare" class="w-4 h-4 text-indigo-400"></i>
+                Tabel Analogi Elektrik vs Mekanik (Serway Tabel 32.1)
+              </h4>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-[11px]">
+                  <thead>
+                    <tr class="border-b border-slate-800 text-slate-400">
+                      <th class="py-1">Rangkaian Elektrik (LC)</th>
+                      <th class="py-1">Sistem Mekanik (Pegas-Massa)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800/60 text-slate-300 font-mono">
+                    <tr><td class="py-1 text-cyan-400">Muatan (\(Q\))</td><td class="py-1 text-amber-400">Posisi balok (\(x\))</td></tr>
+                    <tr><td class="py-1 text-cyan-400">Arus (\(I = dQ/dt\))</td><td class="py-1 text-amber-400">Kecepatan (\(v = dx/dt\))</td></tr>
+                    <tr><td class="py-1 text-cyan-400">Induktansi (\(L\))</td><td class="py-1 text-amber-400">Massa balok (\(m\)) [Inersia]</td></tr>
+                    <tr><td class="py-1 text-cyan-400">Kapasitansi Kebalikan (\(1/C\))</td><td class="py-1 text-amber-400">Konstanta pegas (\(k\))</td></tr>
+                    <tr><td class="py-1 text-cyan-400">Energi Magnet (\(\frac{1}{2}LI^2\))</td><td class="py-1 text-amber-400">Energi Kinetik (\(\frac{1}{2}mv^2\))</td></tr>
+                    <tr><td class="py-1 text-cyan-400">Energi Listrik (\(\frac{Q^2}{2C}\))</td><td class="py-1 text-amber-400">Energi Potensial (\(\frac{1}{2}kx^2\))</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIMULASI SINKRON BERDAMPINGAN: LC CIRCUIT VS SPRING-MASS -->
+          <div class="rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-2xl">
+            <div class="p-3 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i data-lucide="play" class="w-4 h-4 text-emerald-400"></i>
+                <span class="font-bold text-sm text-white">Simulasi Sinkron Berdampingan: Rangkaian LC vs Pegas-Massa</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <button id="btnPlayPauseLC" class="px-3 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-xs font-semibold flex items-center gap-1.5 transition">
+                  <i data-lucide="pause" class="w-3.5 h-3.5" id="iconPlayPauseLC"></i>
+                  <span id="textPlayPauseLC">Pause</span>
+                </button>
+                <button id="btnResetLC" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-xs border border-slate-700">
+                  Reset Fase
+                </button>
+              </div>
+            </div>
+
+            <!-- Canvas Split Dual -->
+            <div class="bg-slate-950 p-2 relative" style="height: 280px;">
+              <canvas id="lcDualCanvas" width="700" height="280" class="w-full h-full block"></canvas>
+            </div>
+
+            <!-- Real-time Energy Balance Bars -->
+            <div class="p-3 bg-slate-900 border-t border-slate-800 grid grid-cols-2 gap-4 text-xs">
+              <div class="space-y-1">
+                <div class="flex justify-between text-slate-300">
+                  <span>Energi Rangkaian Elektrik:</span>
+                  <span class="font-mono text-[11px] text-cyan-400">Listrik (\(U_C\)) vs Magnet (\(U_L\))</span>
+                </div>
+                <div class="h-4 bg-slate-950 rounded-full overflow-hidden flex border border-slate-800">
+                  <div id="barUc" class="bg-emerald-500 h-full transition-all duration-75" style="width: 50%;"></div>
+                  <div id="barUl" class="bg-cyan-500 h-full transition-all duration-75" style="width: 50%;"></div>
+                </div>
+              </div>
+
+              <div class="space-y-1">
+                <div class="flex justify-between text-slate-300">
+                  <span>Energi Mekanik Pegas:</span>
+                  <span class="font-mono text-[11px] text-amber-400">Potensial (\(U_p\)) vs Kinetik (\(E_k\))</span>
+                </div>
+                <div class="h-4 bg-slate-950 rounded-full overflow-hidden flex border border-slate-800">
+                  <div id="barUp" class="bg-amber-500 h-full transition-all duration-75" style="width: 50%;"></div>
+                  <div id="barEk" class="bg-rose-500 h-full transition-all duration-75" style="width: 50%;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Controls LC -->
+            <div class="p-3 bg-slate-900/90 border-t border-slate-800 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+              <div>
+                <div class="flex justify-between text-slate-300 mb-1">
+                  <span>Induktansi (\(L\)): <strong id="lblL_LC" class="text-cyan-400">2.81 mH</strong></span>
+                </div>
+                <input id="sliderL_LC" type="range" min="0.5" max="10" step="0.1" value="2.81" class="w-full accent-cyan-500">
+              </div>
+
+              <div>
+                <div class="flex justify-between text-slate-300 mb-1">
+                  <span>Kapasitansi (\(C\)): <strong id="lblC_LC" class="text-emerald-400">9.00 \(\mu\text{F}\)</strong></span>
+                </div>
+                <input id="sliderC_LC" type="range" min="1" max="25" step="0.5" value="9.0" class="w-full accent-emerald-500">
+              </div>
+
+              <div class="flex flex-col justify-center bg-slate-950 p-2 rounded border border-slate-800 text-center font-mono">
+                <span class="text-slate-400 text-[10px]">Frekuensi Natural (\(f = \frac{1}{2\pi\sqrt{LC}}\)):</span>
+                <span id="lblFreqLC" class="text-emerald-400 font-bold text-xs">1.00 kHz</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION: 32.6 RLC CIRCUITS & DAMPING -->
+      <!-- ============================================== -->
+      <div id="tab-32-6" class="tab-content hidden space-y-6">
+        <div class="border-b border-slate-800 pb-4">
+          <div class="text-xs font-mono text-rose-400 font-semibold uppercase tracking-wider mb-1">Subbab 32.6</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Rangkaian RLC Seri & Osilasi Teredam (Damped Oscillations)</h2>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <!-- Teori Redaman RLC (5 cols) -->
+          <div class="lg:col-span-5 space-y-4 text-xs leading-relaxed text-slate-300">
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-2">
+              <h4 class="font-bold text-white text-sm">Persamaan Diferensial Osilasi Teredam</h4>
+              <p>
+                Ketika resistor dimasukkan ke rangkaian, energi tidak lagi kekal melainkan <strong>berkurang akibat disipasi panas Joule</strong> (\(I^2 R\)):
+              </p>
+              <div class="text-center py-2 text-xs text-white font-mono bg-slate-950 rounded border border-slate-800">
+                $$L \frac{d^2Q}{dt^2} + R \frac{dQ}{dt} + \frac{Q}{C} = 0$$
+              </div>
+              <p class="text-slate-400 text-[11px]">
+                Persamaan ini persis sama dengan osilator pegas-massa dengan gesekan viskos: \(m \frac{d^2x}{dt^2} + b \frac{dx}{dt} + kx = 0\).
+              </p>
+            </div>
+
+            <!-- Tiga Rezim Redaman -->
+            <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 space-y-3">
+              <h4 class="font-bold text-white text-sm">3 Rezim Redaman Berdasarkan \(R_c = \sqrt{4L/C}\):</h4>
+              
+              <div class="p-2.5 rounded-lg bg-cyan-950/40 border border-cyan-800/40 space-y-1">
+                <div class="font-bold text-cyan-300 flex items-center justify-between">
+                  <span>1. Teredam Kurang (Underdamped)</span>
+                  <span class="text-[10px] font-mono">\(R < \sqrt{4L/C}\)</span>
+                </div>
+                <p class="text-[11px] text-slate-300">
+                  Muatan berosilasi dengan amplitudo yang menyusut eksponensial: \(Q(t) = Q_{\max} e^{-Rt/2L} \cos(\omega_d t)\).
+                </p>
+              </div>
+
+              <div class="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-800/40 space-y-1">
+                <div class="font-bold text-emerald-300 flex items-center justify-between">
+                  <span>2. Redaman Kritis (Critically Damped)</span>
+                  <span class="text-[10px] font-mono">\(R = R_c = \sqrt{4L/C}\)</span>
+                </div>
+                <p class="text-[11px] text-slate-300">
+                  Rangkaian kembali ke keadaan seimbang (\(Q=0\)) dalam waktu paling cepat tanpa pernah berosilasi.
+                </p>
+              </div>
+
+              <div class="p-2.5 rounded-lg bg-rose-950/40 border border-rose-800/40 space-y-1">
+                <div class="font-bold text-rose-300 flex items-center justify-between">
+                  <span>3. Teredam Lebih (Overdamped)</span>
+                  <span class="text-[10px] font-mono">\(R > \sqrt{4L/C}\)</span>
+                </div>
+                <p class="text-[11px] text-slate-300">
+                  Hambatan terlalu besar, muatan meluruh perlahan menuju nol tanpa berosilasi.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- SIMULASI OSILOSKOP RLC (7 cols) -->
+          <div class="lg:col-span-7 flex flex-col rounded-2xl bg-slate-900 border border-slate-800 overflow-hidden shadow-xl">
+            <div class="p-3 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <i data-lucide="tv" class="w-4 h-4 text-cyan-400"></i>
+                <span class="font-bold text-sm text-white">Simulator Osiloskop Digital RLC</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button id="btnPresetUnder" class="px-2 py-0.5 text-[11px] rounded bg-cyan-950 text-cyan-400 border border-cyan-800/60 hover:bg-cyan-900">Under</button>
+                <button id="btnPresetCrit" class="px-2 py-0.5 text-[11px] rounded bg-emerald-950 text-emerald-400 border border-emerald-800/60 hover:bg-emerald-900">Critical</button>
+                <button id="btnPresetOver" class="px-2 py-0.5 text-[11px] rounded bg-rose-950 text-rose-400 border border-rose-800/60 hover:bg-rose-900">Over</button>
+              </div>
+            </div>
+
+            <!-- Screen Osiloskop -->
+            <div class="relative bg-slate-950 p-2" style="height: 250px;">
+              <canvas id="rlcScopeCanvas" width="540" height="250" class="w-full h-full block"></canvas>
+              
+              <!-- Grid Overlay styling done in canvas -->
+              <div class="absolute top-3 left-3 bg-slate-900/90 backdrop-blur px-2.5 py-1.5 rounded border border-slate-800 text-[11px] font-mono space-y-0.5">
+                <div>Status: <span id="scopeMode" class="text-cyan-400 font-bold">Underdamped</span></div>
+                <div>\(R_c\) Kritis: <span id="scopeRc" class="text-emerald-400 font-bold">70.0 \(\Omega\)</span></div>
+                <div>Frekuensi \(\omega_d\): <span id="scopeWd" class="text-amber-400 font-bold">1420 rad/s</span></div>
+              </div>
+            </div>
+
+            <!-- Controls Slider RLC -->
+            <div class="p-4 bg-slate-900/90 border-t border-slate-800 space-y-3 text-xs">
+              <div>
+                <div class="flex justify-between text-slate-300 mb-1">
+                  <span>Resistor (\(R\)): <strong id="lblR_RLC" class="text-amber-400">10.0 \(\Omega\)</strong></span>
+                </div>
+                <input id="sliderR_RLC" type="range" min="0" max="150" step="1" value="10" class="w-full accent-amber-500">
+              </div>
+
+              <div class="grid grid-cols-2 gap-3">
+                <div>
+                  <div class="flex justify-between text-slate-300 mb-1">
+                    <span>Induktor (\(L\)): <strong id="lblL_RLC" class="text-cyan-400">2.5 mH</strong></span>
+                  </div>
+                  <input id="sliderL_RLC" type="range" min="0.5" max="10" step="0.5" value="2.5" class="w-full accent-cyan-500">
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-slate-300 mb-1">
+                    <span>Kapasitor (\(C\)): <strong id="lblC_RLC" class="text-emerald-400">2.0 \(\mu\text{F}\)</strong></span>
+                  </div>
+                  <input id="sliderC_RLC" type="range" min="0.2" max="10" step="0.2" value="2.0" class="w-full accent-emerald-500">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION: QUICK QUIZ INTERAKTIF (32.1 - 32.8) -->
+      <!-- ============================================== -->
+      <div id="tab-quiz" class="tab-content hidden space-y-6">
+        <div class="border-b border-slate-800 pb-4">
+          <div class="text-xs font-mono text-cyan-400 font-semibold uppercase tracking-wider mb-1">Evaluasi Pemahaman</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Kuis Cepat Konseptual (Quick Quiz 32.1 - 32.8)</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">Uji pemahaman mendalam Anda mengenai konsep induktansi dengan soal resmi dari buku teks Serway & Jewett.</p>
+        </div>
+
+        <div id="quizContainer" class="space-y-4">
+          <!-- Quiz cards injected dynamically via JS -->
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- SECTION: KALKULATOR FISIKA RUMUS BAB 32 -->
+      <!-- ============================================== -->
+      <div id="tab-calc" class="tab-content hidden space-y-6">
+        <div class="border-b border-slate-800 pb-4">
+          <div class="text-xs font-mono text-emerald-400 font-semibold uppercase tracking-wider mb-1">Alat Bantu Hitung</div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Kalkulator Rumus & Solver Induktansi</h2>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">Hitung nilai-nilai fisis induktansi, konstanta waktu, energi, dan frekuensi osilasi secara presisi.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Kalkulator 1: Solenoida -->
+          <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+              <i data-lucide="calculator" class="w-4 h-4 text-cyan-400"></i>
+              Kalkulator Induktansi Solenoida Ideal
+            </h3>
+            <div class="space-y-2 text-xs">
+              <div>
+                <label class="text-slate-400">Jumlah Lilitan (\(N\)):</label>
+                <input id="calcSolN" type="number" value="300" class="w-full bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="text-slate-400">Panjang \(\ell\) (cm):</label>
+                  <input id="calcSolLen" type="number" value="25.0" class="w-full bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+                </div>
+                <div>
+                  <label class="text-slate-400">Luas \(A\) (cm\(^2\)):</label>
+                  <input id="calcSolArea" type="number" value="4.00" class="w-full bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+                </div>
+              </div>
+              <div>
+                <label class="text-slate-400">Permeabilitas Relatif Inti (\(\kappa_m\)):</label>
+                <input id="calcSolMu" type="number" value="1" placeholder="1 untuk udara, 500 untuk besi" class="w-full bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+              </div>
+              <button onclick="calculateSolenoid()" class="w-full py-2 bg-cyan-600 hover:bg-cyan-500 text-white rounded font-semibold transition mt-2">
+                Hitung Induktansi \(L\)
+              </button>
+              <div id="resSol" class="p-2.5 rounded bg-slate-950 border border-slate-800 text-center font-mono text-cyan-400 font-bold text-sm">
+                \(L = 0.181\text{ mH}\) (\(1.81 \times 10^{-4}\text{ H}\))
+              </div>
+            </div>
+          </div>
+
+          <!-- Kalkulator 2: Rangkaian RL -->
+          <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+              <i data-lucide="clock" class="w-4 h-4 text-amber-400"></i>
+              Kalkulator Waktu & Arus Rangkaian RL
+            </h3>
+            <div class="space-y-2 text-xs">
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="text-slate-400">GGL \(\varepsilon\) (V):</label>
+                  <input id="calcRLEmf" type="number" value="12.0" class="w-full bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+                </div>
+                <div>
+                  <label class="text-slate-400">Resistansi \(R\) (\(\Omega\)):</label>
+                  <input id="calcRLR" type="number" value="6.00" class="w-full bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="text-slate-400">Induktansi \(L\) (mH):</label>
+                  <input id="calcRLL" type="number" value="30.0" class="w-full bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+                </div>
+                <div>
+                  <label class="text-slate-400">Waktu tinjau \(t\) (ms):</label>
+                  <input id="calcRLt" type="number" value="2.00" class="w-full bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+                </div>
+              </div>
+              <button onclick="calculateRL()" class="w-full py-2 bg-amber-600 hover:bg-amber-500 text-white rounded font-semibold transition mt-2">
+                Hitung Parameter Arus
+              </button>
+              <div id="resRL" class="p-2.5 rounded bg-slate-950 border border-slate-800 space-y-1 font-mono text-xs text-slate-300">
+                <div>\(\tau = 5.00\text{ ms}\) | \(I_{\max} = 2.00\text{ A}\)</div>
+                <div class="text-amber-400 font-bold">\(I(2\text{ ms}) = 0.659\text{ A}\)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kalkulator 3: Frekuensi Osilasi LC & RLC -->
+          <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+              <i data-lucide="radio" class="w-4 h-4 text-emerald-400"></i>
+              Kalkulator Resonansi LC & Redaman Kritis
+            </h3>
+            <div class="space-y-2 text-xs">
+              <div class="grid grid-cols-2 gap-2">
+                <div>
+                  <label class="text-slate-400">Induktansi \(L\) (mH):</label>
+                  <input id="calcLCOscL" type="number" value="2.81" class="w-full bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+                </div>
+                <div>
+                  <label class="text-slate-400">Kapasitansi \(C\) (pF):</label>
+                  <input id="calcLCOscC" type="number" value="9.00" class="w-full bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+                </div>
+              </div>
+              <button onclick="calculateLCOsc()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded font-semibold transition mt-2">
+                Hitung Frekuensi
+              </button>
+              <div id="resLCOsc" class="p-2.5 rounded bg-slate-950 border border-slate-800 space-y-1 font-mono text-xs text-slate-300">
+                <div>\(\omega_0 = 6.29 \times 10^6\text{ rad/s}\)</div>
+                <div class="text-emerald-400 font-bold">\(f_0 = 1.00 \times 10^6\text{ Hz}\) (1.00 MHz)</div>
+                <div class="text-slate-400 text-[11px]">Resistansi Kritis \(R_c = 35.3\text{ k}\Omega\)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kalkulator 4: Rapat Energi Magnetik -->
+          <div class="p-5 rounded-2xl bg-slate-900 border border-slate-800 space-y-3">
+            <h3 class="font-bold text-white text-sm flex items-center gap-2">
+              <i data-lucide="battery-charging" class="w-4 h-4 text-purple-400"></i>
+              Kalkulator Energi & Rapat Energi (\(u_B\))
+            </h3>
+            <div class="space-y-2 text-xs">
+              <div>
+                <label class="text-slate-400">Medan Magnet \(B\) (Tesla atau Gauss):</label>
+                <div class="flex gap-2">
+                  <input id="calcEnergyB" type="number" step="0.0001" value="4.50" class="flex-1 bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 font-mono">
+                  <select id="calcEnergyBUnit" class="bg-slate-950 border border-slate-800 rounded p-1.5 text-slate-200 text-xs">
+                    <option value="1">Tesla (T)</option>
+                    <option value="0.0001">Gauss (G)</option>
+                  </select>
+                </div>
+              </div>
+              <button onclick="calculateEnergyDensity()" class="w-full py-2 bg-purple-600 hover:bg-purple-500 text-white rounded font-semibold transition mt-2">
+                Hitung Rapat Energi
+              </button>
+              <div id="resEnergy" class="p-2.5 rounded bg-slate-950 border border-slate-800 font-mono text-xs text-purple-300 font-bold text-center">
+                \(u_B = 8.06 \times 10^6\text{ J/m}^3\) (Superconducting Magnet)
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-slate-800 bg-slate-950/80 py-6 mt-12 text-center text-xs text-slate-500 font-mono">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div>Media Pembelajaran Interaktif Bab 32: Induktansi (Serway & Jewett)</div>
+      <div class="flex items-center gap-4 text-slate-400">
+        <span>KaTeX Math</span> • <span>HTML5 Canvas Physics Engine</span> • <span>Tailwind CSS</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="simulations.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
